@@ -1,21 +1,18 @@
 import Slider from '@react-native-community/slider';
-import {Box, Image, Text} from 'native-base';
-import React, {useEffect, useState} from 'react';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {Box, Image, ScrollView, Text} from 'native-base';
+import React, {useEffect} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import EntypoIcons from 'react-native-vector-icons/Entypo';
 import TrackPlayer, {
   usePlaybackState,
   State,
   useProgress,
+  Capability,
 } from 'react-native-track-player';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {RootStackProps} from '../../navigation/Root';
 import {songs} from '../../utils/mock-data';
-
-const setupPlayer = async () => {
-  await TrackPlayer.setupPlayer({}).then(async () => {});
-
-  await TrackPlayer.add(songs);
-};
 
 const togglePlayBack = async (playbackState: any) => {
   const currentTrack = await TrackPlayer.getCurrentTrack();
@@ -29,25 +26,52 @@ const togglePlayBack = async (playbackState: any) => {
   }
 };
 
+const setupPlayer = async (idx: number) => {
+  await TrackPlayer.setupPlayer({}).then(async () => {});
+  await TrackPlayer.updateOptions({
+    capabilities: [Capability.Play, Capability.Pause, Capability.Stop],
+  });
+  await TrackPlayer.add(songs[idx]);
+};
+
 const MusicPlayerScreen = () => {
+  const navigation = useNavigation<RootStackProps['navigation']>();
+  const route = useRoute();
+  const param: any = route.params;
+  const {audioId} = param;
   const playbackState = usePlaybackState();
-  const [songIndex] = useState(0);
+
   const progress = useProgress();
 
   useEffect(() => {
-    setupPlayer();
-  }, []);
+    setupPlayer(audioId);
+  }, [audioId]);
+
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      // eslint-disable-next-line react-native/no-inline-styles
+      contentContainerStyle={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={styles.backBtn}>
+        <EntypoIcons name="back" size={40} color="#ffd369" />
+      </TouchableOpacity>
       <Box style={styles.mainContainer}>
         <Box style={styles.artworkWrapper}>
           <Image
-            source={{uri: songs[0].artwork}}
+            source={{uri: songs[audioId].artwork}}
             alt="music-img"
             style={styles.artworkImg}
           />
         </Box>
         <Box>
+          <Text style={styles.title}>{songs[audioId].title}</Text>
+        </Box>
+        <Box alignItems={'center'}>
           <Slider
             style={styles.progressContainer}
             value={progress.position}
@@ -75,20 +99,18 @@ const MusicPlayerScreen = () => {
           <Box style={styles.musicControll}>
             <TouchableOpacity onPress={() => togglePlayBack(playbackState)}>
               {playbackState === State.Playing ? (
-                <Ionicons name="ios-pause-circle" size={42} color="#ffd369" />
+                <Ionicons name="ios-pause-circle" size={80} color="#ffd369" />
               ) : (
-                <Ionicons name="ios-play-circle" size={42} color="#ffd369" />
+                <Ionicons name="ios-play-circle" size={80} color="#ffd369" />
               )}
             </TouchableOpacity>
           </Box>
-          <Box>
-            <Text style={styles.title}>{songs[songIndex].title}</Text>
-            <Text style={styles.artist}>{songs[songIndex].artist}</Text>
-            <Text style={styles.description}>Song description</Text>
+          <Box style={styles.descriptonContainer}>
+            <Text style={styles.artist}>{songs[audioId].description}</Text>
           </Box>
         </Box>
       </Box>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
@@ -97,6 +119,9 @@ export default MusicPlayerScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  backBtn: {
+    padding: 20,
   },
   mainContainer: {
     flex: 1,
@@ -120,21 +145,21 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 15,
+    resizeMode: 'contain',
   },
   title: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: '600',
     color: '#eee',
   },
   artist: {
-    fontSize: 16,
-    fontWeight: '200',
+    fontSize: 17,
+    fontWeight: '400',
     color: '#eee',
   },
-  description: {
-    fontSize: 16,
-    fontWeight: '200',
-    color: '#eee',
+  descriptonContainer: {
+    paddingHorizontal: 40,
+    paddingVertical: 12,
   },
   progressContainer: {
     width: 350,

@@ -7,23 +7,31 @@
  *
  * @format
  */
-
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {NativeBaseProvider} from 'native-base';
 import React from 'react';
 import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import HomeScreen2 from './src/screens/home/HomeScreen2';
-import MusicPlayerScreen from './src/screens/player/MusicPlayerScreen';
+import RootStack from './src/navigation/Root';
+
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: '#222831',
+    primary: 'rgb(255, 45, 85)',
+  },
+};
 
 const App = () => {
   return (
     <SafeAreaProvider style={[styles.root]}>
       <NativeBaseProvider>
-        {/* <NavigationContainer> */}
-        <SafeAreaView />
-        <StatusBar barStyle={'light-content'} />
-        <MusicPlayerScreen />
-        {/* </NavigationContainer> */}
+        <NavigationContainer theme={MyTheme}>
+          <SafeAreaView />
+          <StatusBar barStyle={'light-content'} />
+          <RootStack />
+        </NavigationContainer>
       </NativeBaseProvider>
     </SafeAreaProvider>
   );

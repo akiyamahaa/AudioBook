@@ -20,6 +20,15 @@ export interface IAudioInfo {
   title: string;
 }
 
+export interface IAudio {
+  title: string;
+  description: string;
+  artwork: string;
+  url: string;
+  id: number;
+  duration: number;
+}
+
 export interface IAudioBook {
   audioId: number;
   audio: string;
