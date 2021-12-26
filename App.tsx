@@ -13,6 +13,7 @@ import React from 'react';
 import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import HomeScreen2 from './src/screens/home/HomeScreen2';
+import MusicPlayerScreen from './src/screens/player/MusicPlayerScreen';
 
 const App = () => {
   return (
@@ -21,7 +22,7 @@ const App = () => {
         {/* <NavigationContainer> */}
         <SafeAreaView />
         <StatusBar barStyle={'light-content'} />
-        <HomeScreen2 />
+        <MusicPlayerScreen />
         {/* </NavigationContainer> */}
       </NativeBaseProvider>
     </SafeAreaProvider>
