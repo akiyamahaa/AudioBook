@@ -2,35 +2,20 @@ import {Box, ScrollView, Text} from 'native-base';
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import AlbumComponent from '../../components/Album';
-// import {collection, getDocs} from 'firebase/firestore/lite';
-// import {db, IAudioInfo} from '../../utils/firebase';
 import {songs} from '../../utils/mock-data';
 
 const HomeScreen2 = () => {
-  // const [listAudio, setListAudio] = useState<IAudioInfo[]>([]);
-
-  // // const getData = async () => {
-  // //   const resultCol = collection(db, 'audio-info');
-  // //   const resultSnapshot = await getDocs(resultCol);
-  // //   const resultList = resultSnapshot.docs.map((doc: any) => doc.data());
-  // //   setListAudio(resultList);
-  // // };
-
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
   return (
     <Box style={styles.root}>
       <Box style={styles.titleContainer}>
         <Text color="#fff" fontSize={32}>
-          My Audio Book
+          Truyện cổ tích sách nói
         </Text>
       </Box>
       <ScrollView style={styles.container}>
         <Box alignItems={'center'}>
           <Text bold p="4" fontSize={24}>
-            Danh sách sách nói
+            Danh sách truyện
           </Text>
         </Box>
         <Box
